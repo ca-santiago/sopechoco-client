@@ -1,21 +1,21 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {Dispatch} from 'react';
-import {AuthService} from '../auth/services/auth';
+import {AuthService} from '../services/auth';
 import {AuthReducerAction, AuthReducerActionType} from '../types';
 
 function Login({email, password}: any) {
   return async (dispatch: Dispatch<AuthReducerAction>) => {
     const res = await AuthService.Login({email, password});
-    console.log('-------------------------------');
-    console.log(res);
-    if (res.status == 200) {
-      const payload = await res.json();
-      SaveSession('usersession', payload);
-      dispatch({
-        type: AuthReducerActionType.LOGIN_SUCCESS,
-        data: {token: payload.accessToken},
-      });
+    if (res.status !== 200 && res.status !== 201) {
+      // TODO: Dispatch event to redux event store
+      return;
     }
+    const payload = await res.json();
+    SaveSession('usersession', {token: payload.accessToken});
+    dispatch({
+      type: AuthReducerActionType.LOGIN_SUCCESS,
+      data: {token: payload.accessToken},
+    });
   };
 }
 
@@ -23,24 +23,14 @@ function Login({email, password}: any) {
 function LoginFromAsyncStorage(_username?: string) {
   return async function (dispatch: Dispatch<AuthReducerAction>) {
     const sessionPayload = await GetSession('usersession');
-
     if (sessionPayload === null) {
       return dispatch({type: AuthReducerActionType.LOGIN_FAIL, data: {}});
     }
 
-    //TODO: Implement credential verification
-    // const data = sessionPayload;
-    // const res = await CallAuthTokenVerifycation(data.token, data.refreshToken);
-
-    // if (res.code == 200) {
-    //   return dispatch({
-    //     type: AuthReducerActionType.SIGNIN_SUCCESS,
-    //     data: res.value as AuthStateData,
-    //   });
-    // }
-
-    RemoveSession('usersession');
-    return dispatch({type: AuthReducerActionType.LOGIN_FAIL, data: {}});
+    return dispatch({
+      type: AuthReducerActionType.ASYNC_LOGIN_SUCCESS,
+      data: {...sessionPayload},
+    });
   };
 }
 
@@ -56,6 +46,24 @@ function SignOut() {
     return dispatch({type: AuthReducerActionType.TRIGGER_SIGNOUT, data: {}});
   };
 }
+
+function getLoggedUserInfo(token: string) {
+  return async (dispatch: Dispatch<AuthReducerAction>) => {
+    const res = await AuthService.GetProfileInfo({token});
+    if (res.status !== 200) {
+      // TODO: Trigger logout event.
+      SignOut()(dispatch);
+      return;
+    }
+    const payload = await res.json();
+    dispatch({
+      type: AuthReducerActionType.LOGGED_USER_INFO,
+      data: {userInfo: payload},
+    });
+  };
+}
+
+// Session methods
 
 async function SaveSession(key: string, data: object) {
   await AsyncStorage.setItem(`@${key}`, JSON.stringify(data));
@@ -78,4 +86,5 @@ export const AuthActions = {
   SignUp,
   SignOut,
   LoginFromAsyncStorage,
+  getLoggedUserInfo,
 };

@@ -7,24 +7,26 @@ import LoadingScreen from './Loading';
 import MainRouter from './main';
 
 export function AppRouter() {
-  const {loading, token} = useSelector<AppCombinedState, AuthState>(
+  const {loading, token, userInfo} = useSelector<AppCombinedState, AuthState>(
     e => e.auth,
   );
   const authDispacher = useDispatch<Dispatch<AuthReducerAction>>();
 
   useEffect(() => {
-    const tmout = setTimeout(() => {
-      if (!token) {
-        AuthActions.LoginFromAsyncStorage()(authDispacher);
-      }
-    }, 3000);
+    if (!token) {
+      AuthActions.LoginFromAsyncStorage()(authDispacher);
+    }
 
-    return () => clearTimeout(tmout);
+    if (token) {
+      AuthActions.getLoggedUserInfo(token)(authDispacher);
+    }
+
+    return () => {};
   }, [token, authDispacher]);
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  return token ? <MainRouter /> : <AuthRouter />;
+  return token && userInfo ? <MainRouter /> : <AuthRouter />;
 }

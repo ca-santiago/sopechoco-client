@@ -29,6 +29,21 @@ export function AuthReducer(
         token: undefined,
       };
     }
+    case AuthReducerActionType.LOGGED_USER_INFO: {
+      return {
+        ...state,
+        loading: false,
+        userInfo: action.data.userInfo,
+      };
+    }
+    case AuthReducerActionType.ASYNC_LOGIN_SUCCESS: {
+      return {
+        ...state,
+        loading: true,
+        token: action.data.token,
+        userInfo: undefined,
+      };
+    }
     default:
       return state;
   }

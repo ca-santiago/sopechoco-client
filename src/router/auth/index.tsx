@@ -1,6 +1,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {memo} from 'react';
-import {LoginScreen, SignUpScreen} from '../../auth/screens';
+import {LoginScreen} from '../../screens/Login';
+import {SignUpScreen} from '../../screens/SignUp';
 import {AuthStackParamList} from '../../types';
 
 const Stack = createStackNavigator<AuthStackParamList>();

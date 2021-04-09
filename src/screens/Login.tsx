@@ -1,14 +1,16 @@
 import React, {Dispatch} from 'react';
 import {View, Text, Button} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {AuthActions} from '../../actions/Auth';
-import {AuthReducerAction} from '../../types';
+import {AuthActions} from '../actions/Auth';
+import {AuthReducerAction} from '../types';
 
 export function LoginScreen() {
   const authDispacher = useDispatch<Dispatch<AuthReducerAction>>();
 
   function _handleSubmit() {
-    AuthActions.Login({email: '', password: ''})(authDispacher);
+    AuthActions.Login({email: 'casj_@hotmail.com', password: 'nice123'})(
+      authDispacher,
+    );
   }
 
   return (

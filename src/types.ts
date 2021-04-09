@@ -2,13 +2,24 @@ export enum AuthReducerActionType {
   'LOGIN_REQUEST',
   'LOGIN_SUCCESS',
   'LOGIN_FAIL',
+  'ASYNC_LOGIN_SUCCESS',
 
   'TRIGGER_SIGNOUT',
+
+  'LOGGED_USER_INFO',
 }
 
 export interface AuthState {
   loading: boolean;
   token?: string;
+  userInfo?: UserInfo;
+}
+
+export interface UserInfo {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
 }
 
 export interface AuthReducerAction {
@@ -66,4 +77,10 @@ export type AuthStackParamList = {
     email: string;
     password: string;
   };
+};
+
+export type BottomTabParamList = {
+  Profucts: {};
+  Profile: {};
+  Orders: {};
 };
