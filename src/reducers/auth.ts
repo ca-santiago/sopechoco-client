@@ -29,6 +29,14 @@ export function AuthReducer(
         token: undefined,
       };
     }
+    case AuthReducerActionType.TRIGGER_SIGNOUT: {
+      return {
+        ...state,
+        loading: true,
+        token: undefined,
+        userInfo: undefined,
+      };
+    }
     case AuthReducerActionType.LOGGED_USER_INFO: {
       return {
         ...state,
