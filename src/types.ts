@@ -56,6 +56,14 @@ export type ConvertParamsIntoScreenTypes<
 
 export type MainRouterParamList = {
   BottomTab: {};
-  ChatStack: {};
-  ProductStack: {};
+  ProfileStack: {};
+  CheckoutStack: {};
+};
+
+export type AuthStackParamList = {
+  Login: {};
+  SignUp: {
+    email: string;
+    password: string;
+  };
 };
