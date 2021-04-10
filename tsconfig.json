@@ -11,6 +11,7 @@
     "strict": true,
     "target": "esnext"
   },
+  "types": ["styled-components-react-native"],
   "exclude": [
     "node_modules",
     "babel.config.js",

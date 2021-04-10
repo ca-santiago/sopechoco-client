@@ -27,10 +27,44 @@ export interface AuthReducerAction {
   data: Partial<AuthState>;
 }
 
+/*
+ * PRODUCTS
+ */
+
+export enum ProductReducerActionType {
+  'ADD_PRODS',
+  'REMOVE_PROD',
+
+  'RESET',
+}
+
+export interface Product {
+  id: string;
+  title: string;
+  available: boolean;
+  description: string;
+  guisos: string[];
+  maxGuisos: number;
+  minGuisos: number;
+  price: number;
+}
+
+export interface ProductState {
+  page: number;
+  count: number;
+  items: Product[];
+}
+
+export interface ProductReducerAction {
+  type: ProductReducerActionType;
+  data: ProductState;
+}
+
 // Redux state type definitions
 
 export interface AppCombinedState {
   auth: AuthState;
+  product: ProductState;
 }
 
 export type ReducersCombinedActions = AuthReducerAction;
@@ -67,8 +101,14 @@ export type ConvertParamsIntoScreenTypes<
 
 export type MainRouterParamList = {
   BottomTab: {};
+  ProductStack: ConvertParamsIntoScreenTypes<ProductStackParamList>;
   ProfileStack: {};
   CheckoutStack: {};
+};
+
+export type ProductStackParamList = {
+  Product: {id: string};
+  guisoDetail: {id: string};
 };
 
 export type AuthStackParamList = {

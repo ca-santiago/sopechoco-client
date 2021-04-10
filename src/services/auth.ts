@@ -1,4 +1,4 @@
-import {AuthContants} from '../constants/auth';
+import {API_URL} from '../constants';
 
 export interface LoginProps {
   email: string;
@@ -22,6 +22,8 @@ export interface GetProfileInfoProps {
 
 export type SignUpReturnType = null;
 
+const baseUrl = `${API_URL}/auth`;
+
 async function SignUp({email, password, name}: SignUpProps) {
   try {
     const options = {
@@ -32,7 +34,7 @@ async function SignUp({email, password, name}: SignUpProps) {
         name,
       }),
     };
-    const res = await fetch(`${AuthContants.AUTH_API}/auth/`, options);
+    const res = await fetch(`${baseUrl}/`, options);
 
     if (res.status === 201) {
       return res.json();
@@ -55,7 +57,7 @@ async function Login({email, password}: LoginProps): Promise<Response> {
       password,
     }),
   };
-  return await fetch(`${AuthContants.AUTH_API}/auth/login`, options);
+  return await fetch(`${baseUrl}/login`, options);
 }
 
 async function GetProfileInfo({token}: GetProfileInfoProps) {
@@ -66,7 +68,7 @@ async function GetProfileInfo({token}: GetProfileInfoProps) {
       Authorization: `Bearer ${token}`,
     },
   };
-  return await fetch(`${AuthContants.AUTH_API}/auth/profile`, options);
+  return await fetch(`${baseUrl}/profile`, options);
 }
 
 export const AuthService = {
