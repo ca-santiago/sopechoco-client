@@ -16,9 +16,9 @@ export function useRequestInterceptor<T, U>(
   return async function (...props: Parameters<typeof fn>) {
     try {
       const res: Response = await fn(...props);
-      console.log('res ============================');
-      console.log(res.status);
-      console.log('res ============================');
+      // console.log('res ============================');
+      // console.log(res.status);
+      // console.log('res ============================');
       switch (res.status) {
         case 200: {
           events.OK?.(await res.json());

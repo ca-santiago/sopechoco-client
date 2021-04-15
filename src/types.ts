@@ -60,6 +60,33 @@ export interface ProductReducerAction {
   data: ProductState;
 }
 
+// Guisos
+
+export enum GuisoReducerActionType {
+  'ADD_GUISOS',
+  'REMOVE_GUISOS',
+
+  'RESET',
+}
+
+export interface Guiso {
+  id: string;
+  title: string;
+  description: string;
+  available: boolean;
+}
+
+export interface GuisoState {
+  page: number;
+  count: number;
+  items: Guiso[];
+}
+
+export interface GuisoReducerAction {
+  type: GuisoReducerActionType;
+  data: Guiso[] | Guiso;
+}
+
 // Redux state type definitions
 
 export interface AppCombinedState {

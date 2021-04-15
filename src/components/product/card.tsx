@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/core';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {Text} from 'react-native';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import {MainRouterParamList, Product} from '../../types';
 import {ProductCard} from './styles';
 
@@ -19,16 +19,14 @@ export function HomeProductCard(props: HomeProductCardProps) {
   }
 
   return (
-    <TouchableHighlight onPress={_onPress}>
+    <TouchableOpacity activeOpacity={0.7} onPress={_onPress}>
       <ProductCard.Container>
-        <ProductCard.Image>
-          <Text>asd</Text>
-        </ProductCard.Image>
+        <ProductCard.Image />
         <ProductCard.Body>
           <ProductCard.Title>{title}</ProductCard.Title>
-          <Text>{price}</Text>
+          <Text>$ {price}</Text>
         </ProductCard.Body>
       </ProductCard.Container>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 }
