@@ -28,16 +28,14 @@ function GuisoSelector(props: Props) {
   }
 
   return (
-    <>
-      <TouchableNativeFeedback
-        style={{overflow: 'hidden'}}
-        onPress={() => toggleSelect()}>
-        <Container selected={selected}>
-          <Text selected={selected}>{data.title}</Text>
-          {/* {renderCounter} */}
-        </Container>
-      </TouchableNativeFeedback>
-    </>
+    <TouchableNativeFeedback
+      style={{overflow: 'hidden'}}
+      onPress={() => toggleSelect()}>
+      <Container selected={selected}>
+        <Text selected={selected}>{data.title}</Text>
+        {/* {renderCounter} */}
+      </Container>
+    </TouchableNativeFeedback>
   );
 }
 

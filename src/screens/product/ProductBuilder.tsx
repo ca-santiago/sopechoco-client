@@ -2,20 +2,28 @@ import React, {memo, useCallback, useMemo, useState} from 'react';
 import {Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
-// COMPONENTS
+/*
+ * Components
+ */
 import ProductDetails from '../../components/product/prodDetail';
-import FooterSelector from '../../components/product/Footer';
+import BottomButton from '../../components/product/BottomButton';
 import GuisoCard from '../../components/product/GuisosCard';
+import ProductCounter from '../../components/product/counter';
 
-// STYLES
+/*
+ * Styles
+ */
 import {SProductView} from '../../components/product/styles';
 
-// HOOKS
-import useRenderCounter from '../../hooks/useRenderCounter';
+/*
+ * Hooks
+ */
 import {UseProductBuilder} from '../../hooks/useProductBuilder';
 import {useSelector} from 'react-redux';
 
-// TYPES
+/*
+ * Types
+ */
 import {StackScreenProps} from '@react-navigation/stack';
 import {
   AppCombinedState,
@@ -25,11 +33,13 @@ import {
 } from '../../types';
 type Props = StackScreenProps<ProductStackParamList, 'Product'>;
 
+/*
+ * Component
+ */
 function ProductDetailScreen(props: Props) {
   const {params} = props.route;
 
   // Hooks
-  const renderCounter = useRenderCounter();
   const {items} = useSelector<AppCombinedState, ProductState>(s => s.product);
 
   // Local state
@@ -54,11 +64,16 @@ function ProductDetailScreen(props: Props) {
     selectedGuisos: selectedGuisos,
   });
 
+  function transferToCart() {
+    console.log('Transfering');
+  }
+
   return (
     <SProductView>
       <ScrollView>
         {/* {renderCounter} */}
         <ProductDetails data={product} customName={state.displayName} />
+        <ProductCounter total={state.total} onChange={state.setCount} />
         <GuisoCard
           preSelected={[]}
           onChangeValue={onGuisoCardValueChange}
@@ -67,7 +82,7 @@ function ProductDetailScreen(props: Props) {
           guisos={product.guisos}
         />
       </ScrollView>
-      <FooterSelector />
+      <BottomButton onAddPress={transferToCart} addEnable={state.canBuy} />
     </SProductView>
   );
 }

@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-
 export const SProductView = styled.View`
   background-color: #fff;
   flex: 1;
@@ -14,7 +13,7 @@ export const GuisosCard = {
     margin: 5px;
     padding: 10px;
     border-radius: 15px;
-    background-color: rgb(200, 70, 20);
+    background-color: #ed553b;
   `,
   Title: styled.Text`
     color: white;
@@ -77,14 +76,17 @@ export const ProductCard = {
 
 export const SProductDetail = {
   Container: styled.View`
-    min-height: 350px;
+    min-height: 250px;
     background-color: #fff;
     display: flex;
   `,
   ImagenContainer: styled.View`
     width: 100%;
-    max-height: 220px;
+    max-height: 200px;
     background-color: #eee;
+    overflow: hidden;
+    /* border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px; */
   `,
   Body: styled.View`
     margin: 8px;
@@ -95,27 +97,68 @@ export const SProductDetail = {
   `,
   Title: styled.Text`
     font-size: 20px;
-    font-weight: bold;
+    /* font-weight: bold; */
     color: #333;
   `,
   Description: styled.Text``,
   Price: styled.Text`
     color: #333;
+    font-size: 18px;
   `,
 };
 
-export const SFooterSelector = {
+export const SProductCounter = {
   Container: styled.View`
-    background-color: #ed553b;
-    color: #fff;
-    height: 60px;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: center;
     flex-direction: row;
-    /* border-top-left-radius: 15px; */
-    /* border-top-right-radius: 15px; */
+    margin: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: 'rgb(237, 85, 59)';
+  `,
+  Text: styled.Text`
+    color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+  `,
+  Total: styled.Text`
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 15px;
+  `,
+  Pressable: styled.Pressable`
+    border-radius: 5px;
     padding: 5px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    background-color: rgba(255, 255, 255, 0.4);
+  `,
+};
+
+export const SAddToCart = {
+  Container: styled.View`
+    flex-direction: column;
+    padding: 5px;
+  `,
+  CartIcon: styled.Pressable`
+    border-radius: 5px;
+    padding: 5px;
+    align-self: flex-end;
+    background-color: rgba(255, 255, 255, 0.3);
+  `,
+  AddBtn: styled.View<{enable: boolean}>``,
+  AddText: styled.Text<{enable: boolean}>`
+    align-items: center;
+    justify-content: center;
+    background-color: ${props =>
+      props.enable ? 'rgb(237, 85, 59)' : 'rgba(237, 85, 59, 0.6)'};
+    padding: 15px;
+    border-radius: 15px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    color: ${props => (props.enable ? 'white' : 'white')};
   `,
 };

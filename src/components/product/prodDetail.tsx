@@ -1,9 +1,18 @@
 import React, {memo} from 'react';
 
-// HOOKS
-import useRenderCounter from '../../hooks/useRenderCounter';
+/*
+ * Components
+ */
+import BackButton from '../../components/BackButton';
 
-// STYLES
+/*
+ * Hooks
+ */
+// import useRenderCounter from '../../hooks/useRenderCounter';
+
+/*
+ * STYLES
+ */
 import {SProductDetail} from './styles';
 const {
   Container,
@@ -15,22 +24,25 @@ const {
   Body,
 } = SProductDetail;
 
-// TYPES
+/*
+ * Types
+ */
 import {Product} from '../../types';
 type Props = {
   data: Product;
   customName: string;
 };
 
-// COMPONENT
+/*
+ * Components
+ */
 function ProductDetails(props: Props) {
   const {data, customName} = props;
-
-  const renderCounter = useRenderCounter();
 
   return (
     <Container>
       {/* {renderCounter} */}
+      <BackButton />
       <ImagenContainer>
         <Image source={{uri: 'http://192.168.43.23:3000/sope.jpg'}} />
       </ImagenContainer>

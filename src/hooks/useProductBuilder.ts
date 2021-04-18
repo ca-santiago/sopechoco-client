@@ -9,9 +9,14 @@ type Props = {
 };
 
 export function UseProductBuilder(props: Props) {
-  const {price, selectedGuisos} = props;
+  const {price, selectedGuisos, max, min} = props;
   const [count, setCount] = useState<number>(1);
   const [total, setTotal] = useState<number>(price * count);
+  const canBuy = useMemo(() => {
+    const isAmongLimits =
+      selectedGuisos.length >= min && selectedGuisos.length <= max;
+    return isAmongLimits;
+  }, [max, min, selectedGuisos.length]);
 
   const displayName = useMemo(() => {
     const nameStillArr = Array.from(selectedGuisos.map(v => v.title));
@@ -22,21 +27,16 @@ export function UseProductBuilder(props: Props) {
     return nameStillArr.join(' ');
   }, [selectedGuisos]);
 
-  function increase(value: number) {
-    setCount(prev => prev + value);
-    setTotal(price * (count + value));
-  }
-
-  function decrease(value: number) {
-    setCount(prev => prev - value);
-    setTotal(price * (count - value));
+  function _setCount(value: number) {
+    setCount(value);
+    setTotal(price * value);
   }
 
   return {
     count,
     total,
-    increase,
-    decrease,
+    setCount: _setCount,
     displayName,
+    canBuy,
   };
 }
