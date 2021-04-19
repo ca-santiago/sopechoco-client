@@ -33,9 +33,6 @@ type Props = {
   customName: string;
 };
 
-/*
- * Components
- */
 function ProductDetails(props: Props) {
   const {data, customName} = props;
 

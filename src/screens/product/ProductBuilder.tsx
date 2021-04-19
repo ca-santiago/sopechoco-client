@@ -1,4 +1,4 @@
-import React, {memo, useCallback, useMemo, useState} from 'react';
+import React, {memo, useMemo} from 'react';
 import {Text} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -27,7 +27,6 @@ import {useSelector} from 'react-redux';
 import {StackScreenProps} from '@react-navigation/stack';
 import {
   AppCombinedState,
-  Guiso,
   ProductStackParamList,
   ProductState,
 } from '../../types';
@@ -47,11 +46,6 @@ function ProductDetailScreen(props: Props) {
     items,
     params.id,
   ]);
-  const [selectedGuisos, setSelectedGuisos] = useState<Guiso[]>([]);
-
-  const onGuisoCardValueChange = useCallback(function (values: Guiso[]) {
-    setSelectedGuisos(_ => values);
-  }, []);
 
   if (product == null) {
     return <Text>Not found</Text>;
@@ -61,11 +55,12 @@ function ProductDetailScreen(props: Props) {
     max: product.maxGuisos,
     min: product.minGuisos,
     price: product.price,
-    selectedGuisos: selectedGuisos,
   });
 
   function transferToCart() {
-    console.log('Transfering');
+    // THen reset the whole internal state
+    // state.Reset();
+    console.log('State reseted');
   }
 
   return (
@@ -73,10 +68,15 @@ function ProductDetailScreen(props: Props) {
       <ScrollView>
         {/* {renderCounter} */}
         <ProductDetails data={product} customName={state.displayName} />
-        <ProductCounter total={state.total} onChange={state.setCount} />
+        <ProductCounter
+          total={state.total}
+          onChange={state.setCount}
+          count={state.count}
+        />
         <GuisoCard
           preSelected={[]}
-          onChangeValue={onGuisoCardValueChange}
+          selectedGuisos={state.selectedGuisos}
+          onChangeValue={state.setSelectedGuisos}
           max={product.maxGuisos}
           min={product.minGuisos}
           guisos={product.guisos}

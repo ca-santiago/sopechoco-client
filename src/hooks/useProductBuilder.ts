@@ -1,17 +1,25 @@
 import {useMemo, useState} from 'react';
-import {Guiso} from '../types';
 
+/*
+ * Types
+ */
+import {Guiso} from '../types';
 type Props = {
   max: number;
   min: number;
   price: number;
-  selectedGuisos: Guiso[];
 };
 
+/*
+ * Main Component
+ */
 export function UseProductBuilder(props: Props) {
-  const {price, selectedGuisos, max, min} = props;
+  const {price, max, min} = props;
+
   const [count, setCount] = useState<number>(1);
-  const [total, setTotal] = useState<number>(price * count);
+  const total = useMemo(() => price * count, [count, price]);
+  const [selectedGuisos, setSelectedGuisos] = useState<Guiso[]>([]);
+
   const canBuy = useMemo(() => {
     const isAmongLimits =
       selectedGuisos.length >= min && selectedGuisos.length <= max;
@@ -29,14 +37,25 @@ export function UseProductBuilder(props: Props) {
 
   function _setCount(value: number) {
     setCount(value);
-    setTotal(price * value);
+  }
+
+  function _setSelectedGuisos(gs: Guiso[]) {
+    setSelectedGuisos(() => gs);
+  }
+
+  function Reset() {
+    setCount(1);
+    setSelectedGuisos([]);
   }
 
   return {
     count,
     total,
     setCount: _setCount,
+    setSelectedGuisos: _setSelectedGuisos,
+    selectedGuisos,
     displayName,
     canBuy,
+    Reset,
   };
 }

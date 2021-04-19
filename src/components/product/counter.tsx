@@ -1,35 +1,41 @@
-import React, {memo, useState} from 'react';
-
-// STYLES
-import {SProductCounter} from './styles';
-const {Container, Text, Total, Pressable} = SProductCounter;
+import React, {memo} from 'react';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+/*
+ * Helpers
+ */
+import {clamp} from '../../helper/clamp';
+/*
+ * Styles
+ */
+import {SProductCounter} from './styles';
+/*
+ * Components
+ */
+const {Container, Text, Total, Pressable} = SProductCounter;
 
-function clamp(max: number, min: number, curr: number) {
-  return Math.max(min, Math.min(max, curr));
-}
-
+/*
+ * Types
+ */
 type Props = {
   total: number;
+  count: number;
   onChange?: (value: number) => void;
 };
 
 function ProductCounter(props: Props) {
-  const {total, onChange} = props;
+  const {total, onChange, count} = props;
 
   function _decrease() {
     const clamped = clamp(50, 1, count - 1);
-    setCount(clamped);
+    // setCount(clamped);
     clamped !== count && onChange?.(clamped);
   }
 
   function _increase() {
     const clamped = clamp(50, 1, count + 1);
-    setCount(clamped);
+    // setCount(clamped);
     clamped !== count && onChange?.(clamped);
   }
-
-  const [count, setCount] = useState<number>(1);
 
   return (
     <Container>

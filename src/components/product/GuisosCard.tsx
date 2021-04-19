@@ -1,37 +1,58 @@
-import React, {memo, useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Text} from 'react-native';
+/*
+ * Hooks
+ */
 import useRenderCounter from '../../hooks/useRenderCounter';
 import {useRequestInterceptor} from '../../hooks/useRequestInterceptor';
+/*
+ * Services
+ */
 import {GuisoService} from '../../services/guiso';
+/*
+ * Types
+ */
 import {Guiso} from '../../types';
+/*
+ * Components
+ */
 import GuisoSelector from './GuisoSelector';
-
-// STYLES
-
+/*
+ * Styles
+ */
 import {GuisosCard} from './styles';
-const {Container, Title, Body} = GuisosCard;
 
-// TYPES
+const {Container, Title, Body} = GuisosCard;
 
 export type Props = {
   max: number;
   min: number;
   guisos: string[];
+  selectedGuisos: Guiso[];
   preSelected: string[];
   onChangeValue?: (values: Guiso[]) => void;
 };
 
-// COMPONENT
-
+/*
+ * Component
+ */
 function GuisoCard(props: Props) {
   const renderCounter = useRenderCounter();
-  const {max, guisos, onChangeValue} = props;
+  const {max, guisos, onChangeValue, selectedGuisos} = props;
 
   const [loading, setLoading] = useState<boolean>(true);
   const [_guisos, setGuisos] = useState<Guiso[]>([]);
 
-  const [selected, setSelected] = useState<string[]>([]);
-  const [selectedObj, setSelectedObj] = useState<Record<string, Guiso>>({});
+  const selected = useMemo<string[]>(() => {
+    return Object.values(selectedGuisos).map(g => g.id);
+  }, [selectedGuisos]);
+  const selectedObj = useMemo<Record<string, Guiso>>(() => {
+    const mappedObj: Record<string, Guiso> = {};
+    Object.values(selectedGuisos).forEach(g => {
+      mappedObj[g.id] = g;
+    });
+    return mappedObj;
+  }, [selectedGuisos]);
 
   function OK(data: Guiso) {
     setGuisos(prev => [...prev, data]);
@@ -54,27 +75,17 @@ function GuisoCard(props: Props) {
         return;
       }
       const filtered = Array.from(new Set([...selected, id]));
-      setSelected(filtered);
-
-      const mapped = Object.assign({}, selectedObj, {
-        [id]: {},
-      });
-      setSelectedObj(mapped);
-      onChangeValue?.(_guisos.filter(g => mapped[g.id]));
+      onChangeValue?.(_guisos.filter(g => filtered.includes(g.id)));
     },
-    [_guisos, max, onChangeValue, selected, selectedObj],
+    [_guisos, max, onChangeValue, selected],
   );
 
   const remove = useCallback(
     function (id: string) {
       const filtered = selected.filter(value => value !== id);
-      setSelected(filtered);
-      const mapped = Object.assign({}, selectedObj);
-      delete mapped[id];
-      setSelectedObj(mapped);
-      onChangeValue?.(_guisos.filter(g => mapped[g.id]));
+      onChangeValue?.(_guisos.filter(g => filtered.includes(g.id)));
     },
-    [_guisos, onChangeValue, selected, selectedObj],
+    [_guisos, onChangeValue, selected],
   );
 
   const addOrRemoveGuiso = useCallback(
