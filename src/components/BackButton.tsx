@@ -9,12 +9,20 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 
-function BackButton() {
+/*
+ * Types
+ */
+type Mode = 'ColorBg' | 'DarkBg';
+type Props = {
+  color?: string;
+};
+
+function BackButton(props: Props) {
   const {goBack} = useNavigation();
   return (
     <Container>
       <Pressable onPress={() => goBack()}>
-        <Icon name="arrow-back" size={35} color="white" />
+        <Icon name="arrow-back" size={35} color={props.color || 'white'} />
       </Pressable>
     </Container>
   );

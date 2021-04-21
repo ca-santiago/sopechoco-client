@@ -4,6 +4,8 @@ export enum AuthReducerActionType {
   'LOGIN_FAIL',
   'ASYNC_LOGIN_SUCCESS',
 
+  'SIGNUP_SUCCESS',
+
   'TRIGGER_SIGNOUT',
 
   'LOGGED_USER_INFO',
@@ -139,10 +141,12 @@ export type ProductStackParamList = {
 };
 
 export type AuthStackParamList = {
-  Login: {};
+  Login: {
+    email?: string;
+    password?: string;
+  };
   SignUp: {
-    email: string;
-    password: string;
+    email?: string;
   };
 };
 

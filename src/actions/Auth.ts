@@ -3,19 +3,51 @@ import {Dispatch} from 'react';
 import {AuthService} from '../services/auth';
 import {AuthReducerAction, AuthReducerActionType} from '../types';
 
-function Login({email, password}: any) {
+type LoginProps = {
+  password: string;
+  email: string;
+};
+
+function Login({email, password}: LoginProps) {
   return async (dispatch: Dispatch<AuthReducerAction>) => {
+    // Accesing login on service layer
     const res = await AuthService.Login({email, password});
+
     if (res.status !== 200 && res.status !== 201) {
       // TODO: Dispatch event to redux event store
       return;
     }
+
     const payload = await res.json();
+
     SaveSession('usersession', {token: payload.accessToken});
+
     dispatch({
       type: AuthReducerActionType.LOGIN_SUCCESS,
       data: {token: payload.accessToken},
     });
+  };
+}
+
+type SignUpProps = {
+  email: string;
+  password: string;
+  name: string;
+};
+
+function SignUp(props: SignUpProps) {
+  return async (dispatch: Dispatch<AuthReducerAction>) => {
+    const res = await AuthService.SignUp(props);
+    if (res.status === 409) {
+      // TODO: Emmit user already registered
+      return;
+    }
+
+    if (res.status === 201) {
+      // Login on success account created
+      Login(props)(dispatch);
+      return;
+    }
   };
 }
 
@@ -27,19 +59,16 @@ function LoginFromAsyncStorage(_username?: string) {
       return dispatch({type: AuthReducerActionType.LOGIN_FAIL, data: {}});
     }
 
-    return dispatch({
+    dispatch({
       type: AuthReducerActionType.ASYNC_LOGIN_SUCCESS,
       data: {...sessionPayload},
     });
   };
 }
 
-function SignUp({_email, _password, _name}: any) {
-  return async (dispatch: Dispatch<AuthReducerAction>) => {
-    dispatch({type: AuthReducerActionType.TRIGGER_SIGNOUT, data: {}});
-  };
-}
-
+/*
+ * Remove storage user credentials and logout from redux store
+ */
 function SignOut() {
   return async (dispatch: Dispatch<AuthReducerAction>) => {
     await RemoveSession('usersession');
