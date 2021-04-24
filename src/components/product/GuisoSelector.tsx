@@ -29,7 +29,7 @@ function GuisoSelector(props: Props) {
 
   return (
     <TouchableNativeFeedback
-      style={{overflow: 'hidden'}}
+      background={TouchableNativeFeedback.Ripple('white', false)}
       onPress={() => toggleSelect()}>
       <Container selected={selected}>
         <Text selected={selected}>{data.title}</Text>

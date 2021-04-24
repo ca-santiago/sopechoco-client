@@ -2,9 +2,13 @@ import React from 'react';
 import {BottomTabParamList} from '../../types';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import OrderHomeScreen from '../../screens/Order';
 import ProductHomeScreen from '../../screens/product/ProductHome';
 import ProfileHomeScreen from '../../screens/Profile';
+
+/*
+ * Screens
+ */
+import OrderStack from './OrderStack';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -23,7 +27,7 @@ export default function MainBottomTab() {
           tabBarIcon: ({color, size}) => setIcon({color, size, name: 'cart'}),
         }}
         name="Orders"
-        component={OrderHomeScreen}
+        component={OrderStack}
       />
       <Tab.Screen
         options={{

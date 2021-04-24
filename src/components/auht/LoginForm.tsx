@@ -69,7 +69,10 @@ function LoginForm() {
     setLoading(true);
     AuthActions.Login({email: data.email, password: data.password})(
       authDispacher,
-    ).finally(() => setTimeout(() => setLoading(false), 1000));
+    ).finally(() => {
+      setLoading(false);
+    });
+    // Clear this timeout // We have got a memory leak
     // reset();
   }
 

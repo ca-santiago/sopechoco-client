@@ -22,6 +22,6 @@ export function ProductReducer(
       return {...prevState, items: mapped};
     }
     default:
-      return {...prevState};
+      return prevState;
   }
 }

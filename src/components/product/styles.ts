@@ -41,10 +41,7 @@ export const SGuisoSelector = {
         : 'rgba(255, 255, 255, 0.174)'};
     padding: 10px;
     margin: 5px;
-    border-radius: 50px;
-    align-items: center;
-    justify-content: center;
-    width: auto;
+    border-radius: 8px;
   `,
   Text: styled.Text<GuisoSelectorProps>`
     color: ${props => (props.selected ? '#333' : '#fff')};

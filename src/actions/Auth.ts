@@ -10,22 +10,26 @@ type LoginProps = {
 
 function Login({email, password}: LoginProps) {
   return async (dispatch: Dispatch<AuthReducerAction>) => {
-    // Accesing login on service layer
-    const res = await AuthService.Login({email, password});
+    try {
+      // Accesing login on service layer
+      const res = await AuthService.Login({email, password});
 
-    if (res.status !== 200 && res.status !== 201) {
-      // TODO: Dispatch event to redux event store
+      if (res.status !== 200 && res.status !== 201) {
+        // TODO: Dispatch event to redux event store
+        return;
+      }
+
+      const payload = await res.json();
+
+      SaveSession('usersession', {token: payload.accessToken});
+
+      dispatch({
+        type: AuthReducerActionType.LOGIN_SUCCESS,
+        data: {token: payload.accessToken},
+      });
+    } catch (err) {
       return;
     }
-
-    const payload = await res.json();
-
-    SaveSession('usersession', {token: payload.accessToken});
-
-    dispatch({
-      type: AuthReducerActionType.LOGIN_SUCCESS,
-      data: {token: payload.accessToken},
-    });
   };
 }
 
@@ -37,15 +41,20 @@ type SignUpProps = {
 
 function SignUp(props: SignUpProps) {
   return async (dispatch: Dispatch<AuthReducerAction>) => {
-    const res = await AuthService.SignUp(props);
-    if (res.status === 409) {
-      // TODO: Emmit user already registered
-      return;
-    }
+    try {
+      const res = await AuthService.SignUp(props);
+      if (res.status === 409) {
+        // TODO: Emmit user already registered
+        return;
+      }
 
-    if (res.status === 201) {
-      // Login on success account created
-      Login(props)(dispatch);
+      if (res.status === 201) {
+        // Login on success account created
+        Login(props)(dispatch);
+        return;
+      }
+    } catch (err) {
+      // TODO: Emmit server or network error
       return;
     }
   };

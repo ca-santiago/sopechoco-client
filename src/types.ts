@@ -1,14 +1,14 @@
 export enum AuthReducerActionType {
-  'LOGIN_REQUEST',
-  'LOGIN_SUCCESS',
-  'LOGIN_FAIL',
-  'ASYNC_LOGIN_SUCCESS',
+  'LOGIN_REQUEST' = 'LOGIN_REQUEST',
+  'LOGIN_SUCCESS' = 'LOGIN_SUCCESS',
+  'LOGIN_FAIL' = 'LOGIN_FAIL',
+  'ASYNC_LOGIN_SUCCESS' = 'ASYNC_LOGIN_SUCCESS',
 
-  'SIGNUP_SUCCESS',
+  'SIGNUP_SUCCESS' = 'SIGNUP_SUCCESS',
 
-  'TRIGGER_SIGNOUT',
+  'TRIGGER_SIGNOUT' = 'TRIGGER_SIGNOUT',
 
-  'LOGGED_USER_INFO',
+  'LOGGED_USER_INFO' = 'LOGGED_USER_INFO',
 }
 
 export interface AuthState {
@@ -34,10 +34,10 @@ export interface AuthReducerAction {
  */
 
 export enum ProductReducerActionType {
-  'ADD_PRODS',
-  'REMOVE_PROD',
+  'ADD_PRODS' = 'ADD_PRODS',
+  'REMOVE_PROD' = 'REMOVE_PROD',
 
-  'RESET',
+  'RESET' = 'RESET',
 }
 
 export interface Product {
@@ -65,10 +65,10 @@ export interface ProductReducerAction {
 // Guisos
 
 export enum GuisoReducerActionType {
-  'ADD_GUISOS',
-  'REMOVE_GUISOS',
+  'ADD_GUISOS' = 'ADD_GUISOS',
+  'REMOVE_GUISOS' = 'REMOVE_GUISOS',
 
-  'RESET',
+  'RESET' = 'RESET',
 }
 
 export interface Guiso {
@@ -89,16 +89,90 @@ export interface GuisoReducerAction {
   data: Guiso[] | Guiso;
 }
 
+/*
+ * Order state
+ */
+
+export interface OrderState {
+  page: number;
+  orders: Order[];
+  count: number;
+}
+
+export interface Order {
+  id: string;
+  status: string;
+  total: number;
+  description: string;
+  items: string[];
+  createdAt: string;
+  groups: string[];
+}
+
+export interface OrderItem {
+  id: string;
+  count: number;
+  itemId: string;
+  groupId: string;
+  guisos: string;
+  details: string;
+}
+
+export enum OrderActionTypeWithoutData {
+  'ORDER_REQUEST' = 'ORDER_REQUEST',
+  'ORDER_SUCESS' = 'ORDER_SUCCESS',
+  'RESET_ORDERS' = 'RESET_ORDERS',
+}
+
+export enum OrderActionTypeSingle {
+  'ORDER_CREATED' = 'ORDER_CREATED',
+  'ORDER_UPDATED' = 'ORDER_UPDATED',
+  'ORDER_DELETED' = 'ORDER_DELETED',
+}
+
+export enum OrderActionTypeMany {
+  'GET_ORDERS' = 'GET_ORDERS',
+  'REMOVE_ORDERS' = 'REMOVES',
+}
+
+export type OrderActionType =
+  | OrderActionTypeSingle
+  | OrderActionTypeWithoutData
+  | OrderActionTypeMany;
+
+export interface OrderReducerActionWithoutData {
+  type: OrderActionTypeWithoutData;
+}
+
+export interface OrderReducerActionWithData {
+  type: OrderActionTypeSingle;
+  data: Order;
+}
+
+export interface OrderReducerActionMany {
+  type: OrderActionTypeMany;
+  data: Order[];
+}
+
+export type OrderReducerAction =
+  | OrderReducerActionWithData
+  | OrderReducerActionWithoutData
+  | OrderReducerActionMany;
+
 // Redux state type definitions
 
 export interface AppCombinedState {
   auth: AuthState;
   product: ProductState;
+  order: OrderState;
 }
 
-export type ReducersCombinedActions = AuthReducerAction;
+export type ReducersCombinedActions = AuthReducerAction &
+  OrderReducerAction &
+  ProductReducerAction;
 
-// Router types
+//
+// =============================== Router types ======================================== //
 
 // A helper type to enable us to strongly type nested
 // screens.
@@ -150,8 +224,15 @@ export type AuthStackParamList = {
   };
 };
 
+export type OrderStackParamList = {
+  OrderHome: {};
+  OrderDetails: {
+    order: Order;
+  };
+};
+
 export type BottomTabParamList = {
   Profucts: {};
   Profile: {};
-  Orders: {};
+  Orders: ConvertParamsIntoScreenTypes<OrderStackParamList>;
 };
